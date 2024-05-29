@@ -3,6 +3,8 @@ project "ImGui"
 	language "C++"
 	cppdialect "C++17"
     staticruntime "off"
+	
+	warnings "Off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
