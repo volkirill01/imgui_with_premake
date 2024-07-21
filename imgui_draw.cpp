@@ -211,6 +211,9 @@ void ImGui::StyleColorsDark(ImGuiStyle* dst)
     colors[ImGuiCol_ResizeGrip]             = ImVec4(0.26f, 0.59f, 0.98f, 0.20f);
     colors[ImGuiCol_ResizeGripHovered]      = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
     colors[ImGuiCol_ResizeGripActive]       = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
+    colors[ImGuiCol_ResizeSeparator]        = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
+    colors[ImGuiCol_ResizeSeparatorHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
+    colors[ImGuiCol_ResizeSeparatorActive]  = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
     colors[ImGuiCol_TabHovered]             = colors[ImGuiCol_HeaderHovered];
     colors[ImGuiCol_Tab]                    = ImLerp(colors[ImGuiCol_Header],       colors[ImGuiCol_TitleBgActive], 0.80f);
     colors[ImGuiCol_TabSelected]            = ImLerp(colors[ImGuiCol_HeaderActive], colors[ImGuiCol_TitleBgActive], 0.60f);
@@ -277,6 +280,9 @@ void ImGui::StyleColorsClassic(ImGuiStyle* dst)
     colors[ImGuiCol_ResizeGrip]             = ImVec4(1.00f, 1.00f, 1.00f, 0.10f);
     colors[ImGuiCol_ResizeGripHovered]      = ImVec4(0.78f, 0.82f, 1.00f, 0.60f);
     colors[ImGuiCol_ResizeGripActive]       = ImVec4(0.78f, 0.82f, 1.00f, 0.90f);
+    colors[ImGuiCol_ResizeSeparator]        = ImVec4(0.50f, 0.50f, 0.50f, 0.50f);
+    colors[ImGuiCol_ResizeSeparatorHovered] = ImVec4(0.78f, 0.82f, 1.00f, 0.60f);
+    colors[ImGuiCol_ResizeSeparatorActive]  = ImVec4(0.78f, 0.82f, 1.00f, 0.90f);
     colors[ImGuiCol_TabHovered]             = colors[ImGuiCol_HeaderHovered];
     colors[ImGuiCol_Tab]                    = ImLerp(colors[ImGuiCol_Header],       colors[ImGuiCol_TitleBgActive], 0.80f);
     colors[ImGuiCol_TabSelected]            = ImLerp(colors[ImGuiCol_HeaderActive], colors[ImGuiCol_TitleBgActive], 0.60f);
@@ -343,6 +349,9 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
     colors[ImGuiCol_ResizeGrip]             = ImVec4(0.35f, 0.35f, 0.35f, 0.17f);
     colors[ImGuiCol_ResizeGripHovered]      = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
     colors[ImGuiCol_ResizeGripActive]       = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
+    colors[ImGuiCol_ResizeSeparator]        = ImVec4(0.00f, 0.00f, 0.00f, 0.30f);
+    colors[ImGuiCol_ResizeSeparatorHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
+    colors[ImGuiCol_ResizeSeparatorActive]  = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
     colors[ImGuiCol_TabHovered]             = colors[ImGuiCol_HeaderHovered];
     colors[ImGuiCol_Tab]                    = ImLerp(colors[ImGuiCol_Header],       colors[ImGuiCol_TitleBgActive], 0.90f);
     colors[ImGuiCol_TabSelected]            = ImLerp(colors[ImGuiCol_HeaderActive], colors[ImGuiCol_TitleBgActive], 0.60f);

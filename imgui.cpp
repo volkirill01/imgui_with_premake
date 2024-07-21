@@ -3415,6 +3415,9 @@ const char* ImGui::GetStyleColorName(ImGuiCol idx)
     case ImGuiCol_ResizeGrip: return "ResizeGrip";
     case ImGuiCol_ResizeGripHovered: return "ResizeGripHovered";
     case ImGuiCol_ResizeGripActive: return "ResizeGripActive";
+    case ImGuiCol_ResizeSeparator: return "ResizeSeparator";
+    case ImGuiCol_ResizeSeparatorHovered: return "ResizeSeparatorHovered";
+    case ImGuiCol_ResizeSeparatorActive: return "ResizeSeparatorActive";
     case ImGuiCol_TabHovered: return "TabHovered";
     case ImGuiCol_Tab: return "Tab";
     case ImGuiCol_TabSelected: return "TabSelected";
@@ -17480,9 +17483,9 @@ static void ImGui::DockNodeUpdate(ImGuiDockNode* node)
     if (node->IsRootNode() && host_window)
     {
         DockNodeTreeUpdatePosSize(node, host_window->Pos, host_window->Size);
-        PushStyleColor(ImGuiCol_Separator, g.Style.Colors[ImGuiCol_Border]);
-        PushStyleColor(ImGuiCol_SeparatorActive, g.Style.Colors[ImGuiCol_ResizeGripActive]);
-        PushStyleColor(ImGuiCol_SeparatorHovered, g.Style.Colors[ImGuiCol_ResizeGripHovered]);
+        PushStyleColor(ImGuiCol_Separator, g.Style.Colors[ImGuiCol_ResizeSeparator]);
+        PushStyleColor(ImGuiCol_SeparatorActive, g.Style.Colors[ImGuiCol_ResizeSeparatorActive]);
+        PushStyleColor(ImGuiCol_SeparatorHovered, g.Style.Colors[ImGuiCol_ResizeSeparatorHovered]);
         DockNodeTreeUpdateSplitter(node);
         PopStyleColor(3);
     }
@@ -18014,8 +18017,8 @@ static void ImGui::DockNodeCalcTabBarLayout(const ImGuiDockNode* node, ImRect* o
     r.Max.x -= style.WindowBorderSize;
 
     float button_sz = g.FontSize;
-    r.Min.x += style.FramePadding.x;
-    r.Max.x -= style.FramePadding.x;
+    if (node->HasCloseButton || node->HasWindowMenuButton && style.WindowMenuButtonPosition == ImGuiDir_Right)
+        r.Max.x -= style.FramePadding.x;
     ImVec2 window_menu_button_pos = ImVec2(r.Min.x, r.Min.y + style.FramePadding.y);
     if (node->HasCloseButton)
     {
@@ -18024,7 +18027,8 @@ static void ImGui::DockNodeCalcTabBarLayout(const ImGuiDockNode* node, ImRect* o
     }
     if (node->HasWindowMenuButton && style.WindowMenuButtonPosition == ImGuiDir_Left)
     {
-        r.Min.x += button_sz + style.ItemInnerSpacing.x;
+        window_menu_button_pos.x += style.FramePadding.x;
+        r.Min.x += button_sz + style.ItemInnerSpacing.x + style.FramePadding.x;
     }
     else if (node->HasWindowMenuButton && style.WindowMenuButtonPosition == ImGuiDir_Right)
     {
