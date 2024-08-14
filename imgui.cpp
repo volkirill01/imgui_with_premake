@@ -5364,7 +5364,7 @@ static void ImGui::RenderDimmedBackgrounds()
         // Draw border around CTRL+Tab target window
         ImGuiWindow* window = g.NavWindowingTargetAnim;
         ImGuiViewport* viewport = window->Viewport;
-        float distance = g.FontSize;
+        float distance = 3.0f;
         ImRect bb = window->Rect();
         bb.Expand(distance);
         if (bb.GetWidth() >= viewport->Size.x && bb.GetHeight() >= viewport->Size.y)
@@ -5373,7 +5373,7 @@ static void ImGui::RenderDimmedBackgrounds()
         if (window->DrawList->CmdBuffer.Size == 0)
             window->DrawList->AddDrawCmd();
         window->DrawList->PushClipRect(viewport->Pos, viewport->Pos + viewport->Size);
-        window->DrawList->AddRect(bb.Min, bb.Max, GetColorU32(ImGuiCol_NavWindowingHighlight, g.NavWindowingHighlightAlpha), window->WindowRounding, 0, 3.0f);
+        GetForegroundDrawList(GetMainViewport())->AddRect(bb.Min, bb.Max, GetColorU32(ImGuiCol_NavWindowingHighlight, g.NavWindowingHighlightAlpha), window->WindowRounding, 0, distance);
         window->DrawList->PopClipRect();
     }
 
@@ -13887,8 +13887,8 @@ void ImGui::NavUpdateWindowingOverlay()
     const ImGuiViewport* viewport = /*g.NavWindow ? g.NavWindow->Viewport :*/ GetMainViewport();
     SetNextWindowSizeConstraints(ImVec2(viewport->Size.x * 0.20f, viewport->Size.y * 0.20f), ImVec2(FLT_MAX, FLT_MAX));
     SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-    PushStyleVar(ImGuiStyleVar_WindowPadding, g.Style.WindowPadding * 2.0f);
-    Begin("###NavWindowingList", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
+    PushStyleVar(ImGuiStyleVar_WindowPadding, g.Style.WindowPadding * 1.5f);
+    Begin("###NavWindowingList", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
     if (g.ContextName[0] != 0)
         SeparatorText(g.ContextName);
     for (int n = g.WindowsFocusOrder.Size - 1; n >= 0; n--)
@@ -13900,7 +13900,11 @@ void ImGui::NavUpdateWindowingOverlay()
         const char* label = window->Name;
         if (label == FindRenderedTextEnd(label))
             label = GetFallbackWindowNameForWindowingList(window);
-        Selectable(label, g.NavWindowingTarget == window);
+        if (Selectable(label, g.NavWindowingTarget == window, ImGuiSelectableFlags_SelectOnRelease))
+        {
+            g.NavWindowingTarget = window;
+            g.NavWindowingTargetAnim = window;
+        }
     }
     End();
     PopStyleVar();
@@ -17625,7 +17629,9 @@ bool ImGui::DockNodeBeginAmendTabBar(ImGuiDockNode* node)
         return false;
     Begin(node->HostWindow->Name);
     PushOverrideID(node->ID);
+    PushStyleVar(ImGuiStyleVar_TabBarBorderSize, 0.0f);
     bool ret = BeginTabBarEx(node->TabBar, node->TabBar->BarRect, node->TabBar->Flags);
+    PopStyleVar();
     IM_UNUSED(ret);
     IM_ASSERT(ret);
     return true;
@@ -17806,6 +17812,7 @@ static void ImGui::DockNodeUpdateTabBar(ImGuiDockNode* node, ImGuiWindow* host_w
     tab_bar->ID = GetID("#TabBar");
     tab_bar->SeparatorMinX = node->Pos.x + host_window->WindowBorderSize; // Separator cover the whole node width
     tab_bar->SeparatorMaxX = node->Pos.x + node->Size.x - host_window->WindowBorderSize;
+    PushStyleVar(ImGuiStyleVar_TabBarBorderSize, 0.0f);
     BeginTabBarEx(tab_bar, tab_bar_rect, tab_bar_flags);
     //host_window->DrawList->AddRect(tab_bar_rect.Min, tab_bar_rect.Max, IM_COL32(255,0,255,255));
 
@@ -17851,6 +17858,7 @@ static void ImGui::DockNodeUpdateTabBar(ImGuiDockNode* node, ImGuiWindow* host_w
                 host_window->NavLastIds[1] = window->TabId;
         }
     }
+    PopStyleVar();
 
     // Restore style colors
     for (int color_n = 0; color_n < ImGuiWindowDockStyleCol_COUNT; color_n++)
