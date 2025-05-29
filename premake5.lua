@@ -1,9 +1,15 @@
+IMGUI_STATIC_LINKINK = true
+
 project "ImGui"
-	kind "StaticLib"
+	if IMGUI_STATIC_LINKINK then
+		kind "StaticLib"
+	else
+		kind "SharedLib"
+	end
 	language "C++"
 	cppdialect "C++17"
-    staticruntime "off"
-	
+	staticruntime "off"
+
 	warnings "Off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -24,10 +30,9 @@ project "ImGui"
 		"imgui_demo.cpp"
 	}
 
-    --defines
-    --{
-    --    "IMGUI_API=__declspec(dllexport)"
-    --}
+	if not IMGUI_STATIC_LINKINK then
+		defines { "IMGUI_API=__declspec(dllexport)" }
+	end
 
 	filter "system:windows"
 		systemversion "latest"
@@ -44,7 +49,7 @@ project "ImGui"
 		runtime "Release"
 		optimize "on"
 
-    filter "configurations:Dist"
+	filter "configurations:Dist"
 		runtime "Release"
 		optimize "on"
-        symbols "off"
+		symbols "off"
